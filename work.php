@@ -1,7 +1,17 @@
 <html lang="en">
 <?php 
 
+#detects cms
 require "DetectCMS.php";
+
+#finds exploits for query type "wordpress" 
+require "exploitFinder.php";
+
+#implement Csv readers
+require "csvReaderForCVEs.php";
+require "csvReaderForExploits.php";
+
+$cmsfound = "";
 
 ?>
 <head>
@@ -19,176 +29,120 @@ require "DetectCMS.php";
 <body>
     <!-- Responsive navbar-->
     <nav class="navbar navbar-expand-lg navbar-dark bg-dark" id="top">
-        <div class="container">
-            <a class="navbar-brand" href="./index.php">NeonEx Platform</a>
+        <div>
+            <a class="navbar-brand" href="./index.php">&nbsp;&nbsp;&nbsp; NeonEx Platform &nbsp;&nbsp;</a>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation"><span class="navbar-toggler-icon"></span></button>
         </div>
     </nav>
-    <!-- Content section-->
-    <section class="py-5">
-        <div class="container my-5">
-            <div class="row justify-content-center">
-                <div class="col-lg-6" id="instructions">
-                    <h2>Passive scan of the website : </h2>
-                    <p class="lead">
-                        <?php
 
-                        if (isset($_GET["site"])) {
-                            $site = $_GET["site"];
-                            echo $site;
+   
+    <div class="row">
+        <div class="col-md-6" style="background-color:seashell;">
+            <br/>
+            <h4>Site: 
+                <?php
+                    if (isset($_GET["site"])) {
+                        $site = $_GET["site"];
+                        echo  $site ;
+                    }
+                    ?>
+            </h4>
+        
+            <hr/>
+            <br/>
 
-                            //TODO : Implement CMS Detection
-                        }
-                        ?>
 
-                    </p>
-                    <h4>CVE Numbers</h4>
-                    <p class="mb-0">
+            <?php
+                if(isset($_GET["site"])){
+                    $detectCMS = $_GET["site"];
+                    echo "<p> Detecting CMS for ... " .  $detectCMS . " ...</p>" ;
+                    
+                    try{
+                        @$cms = new DetectCMS\DetectCMS($detectCMS);
+                        //on linux (lampp xampp) this passes
+                        //it doesnt go to Error 
+                        //but it doesnt show anything else either?
+                    }
+                    catch (Exception $e) {
+                        echo "Error:" . $e;
+                    }
+                    
+                    
+                    if ($cms->getResult()) {
                         
+                        @$cmsfound = $cms->getResult();
+                    
+                        echo "<b>[+] " . $detectCMS . " has CMS: <u>" . $cmsfound . "</u> </b>";
 
-                    <?php
-                        //TODO
-                        //Flow -> Usersite.com -> wordpress 3 -> which CVEs -> describe contents
-                        //use what user inputed to get "wordpress 3" then
-                        //use that to find CVEs based on that
-                        //then print out CVE content
-						if(isset($_GET["site"])){
-							$detectCMS = $_GET["site"];
-							echo "<p>[+] Detecting CMS for ... " .  $detectCMS . " ...</p>" ;
-                            
-							try{
-							    @$cms = new DetectCMS\DetectCMS($detectCMS);
-                                //on linux (lampp xampp) this passes
-                                //it doesnt go to Error 
-                                //but it doesnt show anything else either?
-                            }
-                            catch (Exception $e) {
-                                echo "Error:" . $e;
-                            }
-                            
-                            
-							if ($cms->getResult()) {
-								
-								@$cmsfound = $cms->getResult();
-							
-								echo "<br/><b>" . $detectCMS . " has CMS: " . $cmsfound . " </b>";
-							
-							} else {
-								echo "<br/>Couldnt detect CMS. ";
-							}
-							
-							
-							
-						} else{
-							$detectCMS = "Couldnt detect CMS. Something went wrong with the detection module.";
-                            echo $detectCMS;
-                        }
-
-                        //calls CMS detector and returns CMS
-                        //ex. "Wordpress 3"
-                        
-                        //Then we query for CVE's for "wordpress 3"
-                        //and we count them 
+                        //do cve detection - try nd get cve number from cmsfound
+                        $pickedCveNumber =  $cmsfound;
+                
+                        if ($pickedCveNumber !== "" && $pickedCveNumber !== false) {
 
 
-                        //x
+                            $whichsystem = str_replace(" ", "%20", $pickedCveNumber);
 
-                        
-                        //Implement foreach ^ result
-                        $pickedCveNumber =  $detectCMS;
-						
-						//									removed ! from here !!!!
-                        if ($pickedCveNumber !== "" && $pickedCveNumber == false) {
-
-
-                            $number = $pickedCveNumber;
-                            //echo "<br/><b>" . $number . "</b><br/>";
-
-                            // GET REQUEST TO APIs - try one, if it doesnt work try other
-                            try {
-                                $url = "https://cve.circl.lu/api/cve/$number";
-                                $result = file_get_contents($url);
-                                //echo htmlspecialchars($result);
-                                $result = json_decode($result);
-                                $data = $result->capec;
-                                $num = 1;
-                                foreach ($data as $d) {
-                                    echo "<u> Vulnerability number " . $num . "</u><br/>";
-                                    if (isset($d->name)) {
-                                        echo "Name:" . $d->name . " <br/>";
-                                    }
-                                    if (isset($d->summary)) {
-                                        echo "Summary:" . $d->summary . " <br/>";
-                                    }
-                                    if (isset($d->prerequisites)) {
-                                        echo "Prerequisites : " . $d->prerequisites . " </br>";
-                                    }
-                                    if (isset($d->solutions)) {
-                                        echo "Solutions : " . $d->solutions . " </br>";
-                                    }
-
-                                    //echo $d->name;
-                                    //print_r($d);
-
-                                    $num++;
-                                }
-                            } catch (Exception) {
-                                $url = "https://services.nvd.nist.gov/rest/json/cve/1.0/$number";
-                                $result = file_get_contents($url);
-                                echo htmlspecialchars($result);
-                            }
-                            //https://www.cve-search.org/api/ (dokumentacija samo)
-                            //https://cve.circl.lu/api/cve/CVE-2010-3333
-                            //also whatever this is: https://services.nvd.nist.gov/rest/json/cve/1.0/CVE-2021-45105
-
-
-
+                            // HERE GOES THE CONTENT FROM tester.php
 
                         } else {
                             echo "<br/>CVE number not provided/found.";
                         }
+                    
+                    } else {
+                        echo "<br/>Couldnt detect CMS. ";
+                    }
+                    
+                    
+                } else{
+                    $detectCMS = "Couldnt detect CMS. Something went wrong with the detection module.";
+                    echo $detectCMS;
+                }
 
-                    ?>
+                echo "<br><hr>";
 
-                    </p>
-                    <br>
-                    <h4>Possible Exploits</h4>
-                    <p class="mb-0">
-                        <?php
-                        echo "Possible " . " XSS " . " for " . " v1.2 " . "sourceNumber" . " 1 (references down)";
-                        ?>
-
-                    </p>
+                echo " UNCOMMENT ME ! <br/>";
+                //findInCsv($cmsfound,"3.0","Resources/files_exploits.csv");
+                echo  "<hr/> <br/>";
+                //findInCsvx($cmsfound,"3.0","Resources/allCVEs2022.csv");
 
 
 
-                </div>
-            </div>
+            ?>
+            <br>
+
+
         </div>
-    </section>
 
-    <!-- Content section-->
-    <section class="py-5">
-        <div class="container my-5">
-            <div class="row justify-content-center">
-                <div class="col-lg-6" id="contact">
-                    <p class="lead">References</p>
-                    <p class="mb-0">
-                        <?php
+        <div class="col-md-6" style="background-color:Whitesmoke;">
+            <br/>
+            <h4>Possible Exploits</h4>
+            <?php
+                echo "Attempting exploit finding for CMS : $cmsfound <br/><hr/>";
+                
+                if($cmsfound !== ""){
 
-                        $reference = "exploitdb";
+                    echo "<br/> UNCOMMENT ME <br/>";
 
-                        echo "Ref : $reference";
+                    ////for version stuff:
+                    ////$cmsfoundplusversion = $cmsfound . " " . "3.0";
+                    ////replace cmsfound          v       with $cmsfoundplusversion
 
+                    //$exploits = exploitFinder($cmsfound);
+                    //foreach($exploits as $expl) {
+                    //    echo $expl;
+                    //}
 
-                        ?>
+                }
+                else {
+                    echo "CMS Couldn't pass to detection script.";
+                }
 
-                    </p>
-                </div>
-            </div>
+            ?>
         </div>
-    </section>
 
+    </div>
+
+    
 
 
     <!-- Bootstrap core JS-->
@@ -202,3 +156,51 @@ require "DetectCMS.php";
 </body>
 
 </html>
+
+
+<!-- LOOK UP SPECIFIC CVE NUMBER DETAILS
+
+
+echo "<br/><b> Looking up CVEs for: " . $number . "</b><br/>";
+        
+                                    // GET REQUEST TO APIs - try one, if it doesnt work try other
+                                    try {
+                                        $url = "https://cve.circl.lu/api/cve/$number";
+                                        $result = file_get_contents($url);
+                                        //echo htmlspecialchars($result);
+                                        $result = json_decode($result);
+                                        $data = $result->capec;
+                                        $num = 1;
+                                        foreach ($data as $d) {
+                                            echo "<u> Vulnerability number " . $num . "</u><br/>";
+                                            if (isset($d->name)) {
+                                                echo "Name:" . $d->name . " <br/>";
+                                            }
+                                            if (isset($d->summary)) {
+                                                echo "Summary:" . $d->summary . " <br/>";
+                                            }
+                                            if (isset($d->prerequisites)) {
+                                                echo "Prerequisites : " . $d->prerequisites . " </br>";
+                                            }
+                                            if (isset($d->solutions)) {
+                                                echo "Solutions : " . $d->solutions . " </br>";
+                                            }
+        
+                                            //echo $d->name;
+                                            //print_r($d);
+        
+                                            $num++;
+                                        }
+                                    } catch (Exception) {
+                                        $url = "https://services.nvd.nist.gov/rest/json/cve/1.0/$number";
+                                        $result = file_get_contents($url);
+                                        echo htmlspecialchars($result);
+                                    }
+                                    //https://www.cve-search.org/api/ (dokumentacija samo)
+                                    //https://cve.circl.lu/api/cve/CVE-2010-3333
+                                    //also whatever this is: https://services.nvd.nist.gov/rest/json/cve/1.0/CVE-2021-45105
+        
+        
+        
+        
+ -->

@@ -13,7 +13,7 @@ function versionDetectorFunction($url, $cms){
     
     $versionSource = "";
     foreach($systems as $s){
-        if(str_contains($cms, $s)){
+        if(str_contains(strtoupper($cms), strtoupper($s))){
             echo $cms . " has CMS:" . $s . "<br/>";
             $versionSource = $s;
         }
@@ -22,17 +22,32 @@ function versionDetectorFunction($url, $cms){
         
     }
     if($versionSource !== ""){
-        echo "Checked the name, now its not 'Joomla_1' or whatever, its 'Joomla' - ready for testing.";
+        #echo "Checked the name, now its not 'Joomla_1' or whatever, its 'Joomla' - ready for testing.";
     
         // TODO 
         // IMPLEMETN VERSION DETECTION FOR EACH CMS
 
         if($versionSource == $systems[0]){
-            echo "WP IT";
+            echo "<br/>";
+            #System : Wordpress
+            $response = file_get_contents($url);
+            if(str_contains(strtoupper($response),strtoupper($cms) )) {
+                echo "IT CONTAINS";
+                //TODO 
+            }
+
         }
 
         if($versionSource == $systems[1]){
-            echo "JOOM IT";
+            echo "<br/>";
+            #System : Joomla
+            $response = file_get_contents($url);
+            if(str_contains(strtoupper($response),strtoupper($cms) )) {
+                echo "IT CONTAINS";
+                //TODO 
+            }
+
+
         }
         //TODO LIKE THIS
     
@@ -44,7 +59,7 @@ function versionDetectorFunction($url, $cms){
 
 }
 
-versionDetectorFunction("http://localhost/joom","Joomla x");
+versionDetectorFunction("http://localhost/joom","Joomla");
 
 
     

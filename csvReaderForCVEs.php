@@ -3,6 +3,12 @@
 #give u error 500, just look into your php log file (mine is at /opt/lampp/logs)
 #it will show you its actually a php error
 
+
+#data[0 is a CVE number
+# 2 is desc
+# 1 is status
+# 3 is sauces 
+
 function findInCsvx($query, $version,$datasetfile) {
     //echo $query . $version . $datasetfile;
 
@@ -28,7 +34,7 @@ function findInCsvx($query, $version,$datasetfile) {
                     if(str_contains($data[3], $version2)){
                         
                         //implement status check
-                        $mainEntrysample = "[+] " . $data[0] . " - - " . $data[2] . " - STATUS:  " . $data[1];
+                        $mainEntrysample = "[+] " . $data[0] . " 💉 " . $data[2] . " 📕 : " . $data[1] . " ⛓: " . $data[3];
                         array_push($mainVulns, $mainEntrysample);
                     }
                     else {
@@ -41,7 +47,7 @@ function findInCsvx($query, $version,$datasetfile) {
                             if(str_contains($data[3],$version2)){
                                 //pass
                             }else{
-                                $entry = "[?] " . $data[0] . " - - " . $data[2] . " - STATUS : " . $data[1];
+                                $entry = "[?] " . $data[0] . " 💉 " . $data[2] . " 📕 : " . $data[1] . " ⛓: " . $data[3];
                                 array_push($relatedVulns, $entry);
                             }
                         }
@@ -59,7 +65,7 @@ function findInCsvx($query, $version,$datasetfile) {
             //Clean up the array, remove duplicates 
             $mainVulns = array_unique($mainVulns);
 
-            echo "<br><h4>Vulnerabilities Found</h4><br/><hr/>";
+            echo "<h4>Vulnerabilities Found</h4><hr/>";
             foreach($mainVulns as $vals){
                 echo htmlentities($vals);
                 echo "<br/>";
@@ -70,7 +76,7 @@ function findInCsvx($query, $version,$datasetfile) {
             //Clean up the array, remove duplicates 
             $relatedVulns = array_unique($relatedVulns);
 
-            echo "<br><h4>Possible Related Vulnerabilities</h4><br/><hr/>";
+            echo "<h4>Possible Related Vulnerabilities</h4><hr/>";
             foreach($relatedVulns as $rv){
                 echo htmlentities($rv);
                 echo "<br/>";

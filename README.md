@@ -15,4 +15,5 @@ CMS detection script is from https://github.com/Krisseck/Detect-CMS
 0daytoday from unofficial API (i think this one https://github.com/MrSentex/0day.today-API)
 Exploitdb from https://github.com/offensive-security/exploitdb
 
-# TODO - implement updating exploitdb and 0daytoday, we already have updating of all CVEs list (csv)
+# TODO 
+a bunch

@@ -11,6 +11,9 @@ require "exploitFinder.php";
 require "csvReaderForCVEs.php";
 require "csvReaderForExploits.php";
 
+#require plugindetector
+require "plugindetector.php";
+
 $cmsfound = "";
 
 ?>
@@ -37,9 +40,9 @@ $cmsfound = "";
 
    
     <div class="row">
-        <div class="col-md-6" style="background-color:seashell;">
+        <div class="col-md-6" style="background-color:#e6e6e6;">
             <br/>
-            <h4>Site: 
+            <h4 class="alert alert-dark" style="margin-left:1%;">Site: 
                 <?php
                     if (isset($_GET["site"])) {
                         $site = $_GET["site"];
@@ -55,7 +58,7 @@ $cmsfound = "";
             <?php
                 if(isset($_GET["site"])){
                     $detectCMS = $_GET["site"];
-                    echo "<p> Detecting CMS for ... " .  $detectCMS . " ...</p>" ;
+                    //echo "<p > Detecting CMS for ... " .  $detectCMS . " ...</p>" ;
                     
                     try{
                         @$cms = new DetectCMS\DetectCMS($detectCMS);
@@ -72,21 +75,11 @@ $cmsfound = "";
                         
                         @$cmsfound = $cms->getResult();
                     
-                        echo "<b>[+] " . $detectCMS . " has CMS: <u>" . $cmsfound . "</u> </b>";
+                        echo "<b class='alert alert-dark' style='margin-left:1%;'>[+] Detected CMS: <u>" . $cmsfound . "</u> </b>";
 
                         //do cve detection - try nd get cve number from cmsfound
                         $pickedCveNumber =  $cmsfound;
                 
-                        if ($pickedCveNumber !== "" && $pickedCveNumber !== false) {
-
-
-                            $whichsystem = str_replace(" ", "%20", $pickedCveNumber);
-
-                            // HERE GOES THE CONTENT FROM tester.php
-
-                        } else {
-                            echo "<br/>CVE number not provided/found.";
-                        }
                     
                     } else {
                         echo "<br/>Couldnt detect CMS. ";
@@ -100,14 +93,29 @@ $cmsfound = "";
 
                 echo "<br><hr>";
 
+                $versionFound = " xCall functionx ";
+                echo "<p class='alert alert-dark' style='padding:5; margin-left:1%; margin-right:2%;'> Detected Version:" . $versionFound . "</p>";
+
+                echo "<hr>";
                 echo " UNCOMMENT ME ! <br/>";
-                //findInCsv($cmsfound,"3.0","Resources/files_exploits.csv");
+                #findInCsv($cmsfound,"3.0","Resources/files_exploits.csv");
                 echo  "<hr/> <br/>";
-                //findInCsvx($cmsfound,"3.0","Resources/allCVEs2022.csv");
-
-
-
+                #findInCsvx($cmsfound,"3.0","Resources/allCVEs2022.csv");
             ?>
+
+            <h4 class="alert alert-dark" style="margin-left:1%;">Plugins</h4>
+            <p><i><b>[ Hint ]</b> This website scan isn't agressive. This type of detection only displays SOME/Possible plugins.</i></p>
+            <?php 
+            if (isset($_GET["site"])) {
+                echo "UNCOMMENT ME";
+                #$site = $_GET["site"];
+                #$resultPlugin = pluginDetect($site,$cmsfound);
+                #echo $resultPlugin;
+
+
+            }
+
+            ?>           
             <br>
 
 
@@ -115,7 +123,7 @@ $cmsfound = "";
 
         <div class="col-md-6" style="background-color:Whitesmoke;">
             <br/>
-            <h4>Possible Exploits</h4>
+            <h4 class="alert alert-dark">Possible Exploits</h4>
             <?php
                 echo "Attempting exploit finding for CMS : $cmsfound <br/><hr/>";
                 
@@ -124,13 +132,13 @@ $cmsfound = "";
                     echo "<br/> UNCOMMENT ME <br/>";
 
                     ////for version stuff:
-                    ////$cmsfoundplusversion = $cmsfound . " " . "3.0";
+                    //$cmsfoundplusversion = $cmsfound . " " . "3.0";
                     ////replace cmsfound          v       with $cmsfoundplusversion
 
-                    //$exploits = exploitFinder($cmsfound);
-                    //foreach($exploits as $expl) {
-                    //    echo $expl;
-                    //}
+                    #$exploits = exploitFinder($cmsfound);
+                    #foreach($exploits as $expl) {
+                    #    echo $expl;
+                    #}
 
                 }
                 else {
@@ -138,6 +146,11 @@ $cmsfound = "";
                 }
 
             ?>
+            <br/><hr>
+            <h4 class="alert alert-dark">Possible Fixes</h4>
+            <br>
+            <p>Fix me</p>
+
         </div>
 
     </div>

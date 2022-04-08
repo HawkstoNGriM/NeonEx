@@ -14,6 +14,9 @@ function findInCsvx($query, $version,$datasetfile) {
 
     $relatedVulns = [];
     $mainVulns = [];
+    $finalRelatedVulns = [];
+    $finalMainVulns = [];
+
     $row = 1;
     if (($handle = fopen($datasetfile, "r")) !== FALSE) {
         
@@ -34,7 +37,7 @@ function findInCsvx($query, $version,$datasetfile) {
                     if(str_contains($data[3], $version2)){
                         
                         //implement status check
-                        $mainEntrysample = "[+] " . $data[0] . " 💉 " . $data[2] . " 📕 : " . $data[1] . " ⛓: " . $data[3];
+                        $mainEntrysample = "[+] <a target='_blank' href=https://cve.circl.lu/api/cve/" . $data[0] .">$data[0]</a> " . " 💉 " . $data[2] . " 📕 : " . $data[1] . " ⛓: " . $data[3];
                         array_push($mainVulns, $mainEntrysample);
                     }
                     else {
@@ -47,7 +50,7 @@ function findInCsvx($query, $version,$datasetfile) {
                             if(str_contains($data[3],$version2)){
                                 //pass
                             }else{
-                                $entry = "[?] " . $data[0] . " 💉 " . $data[2] . " 📕 : " . $data[1] . " ⛓: " . $data[3];
+                                $entry = "[?] <a target='_blank' href=https://cve.circl.lu/api/cve/" . $data[0] .">$data[0]</a> " . " 💉 " . $data[2] . " 📕 : " . $data[1] . " ⛓: " . $data[3];
                                 array_push($relatedVulns, $entry);
                             }
                         }
@@ -65,10 +68,13 @@ function findInCsvx($query, $version,$datasetfile) {
             //Clean up the array, remove duplicates 
             $mainVulns = array_unique($mainVulns);
 
-            echo "<h4>Vulnerabilities Found</h4><hr/>";
+            #echo "<h4>Vulnerabilities Found</h4><hr/>";
             foreach($mainVulns as $vals){
-                echo htmlentities($vals);
-                echo "<br/>";
+                //echo htmlentities($vals);
+                $vals = explode("</a>",$vals);
+                $finstr = $vals[0] . "</a>";
+                $finstr = $finstr . htmlentities($vals[1]) . "<br/>";
+                array_push($finalMainVulns, $finstr);
             }
         }
 
@@ -76,21 +82,26 @@ function findInCsvx($query, $version,$datasetfile) {
             //Clean up the array, remove duplicates 
             $relatedVulns = array_unique($relatedVulns);
 
-            echo "<h4>Possible Related Vulnerabilities</h4><hr/>";
+            #echo "<h4>Possible Related Vulnerabilities</h4><hr/>";
             foreach($relatedVulns as $rv){
-                echo htmlentities($rv);
-                echo "<br/>";
+                //echo htmlentities($rv);
+                $rv = explode("</a>",$rv);
+                $finstr = $rv[0] . "</a>";
+                $finstr = $finstr . htmlentities($rv[1]) . "<br/>";
+                array_push($finalRelatedVulns,$finstr);
             }
         }
         
         
     }
 
+    return array($finalMainVulns, $finalRelatedVulns);
+
 
 }
 
 
 
-//findInCsvx("WordPress","3.0","Resources/allCVEs2022.csv");
+#findInCsvx("WordPress","3.0","Resources/allCVEs2022.csv");
 
 ?>

@@ -26,6 +26,7 @@ header('Content-Type: text/html; charset=utf-8');
                         <li class="nav-item"><a class="nav-link active" aria-current="page" href="#!">Home</a></li>
                         <li class="nav-item"><a class="nav-link" href="#instructions">Usage</a></li>
                         <li class="nav-item"><a class="nav-link" href="#contact">Contact</a></li>
+                        <li class="nav-item"><a class="nav-link" href="./vulnfix.html">Fixing Vulns</a></li>
                     </ul>
                 </div>
             </div>
@@ -48,9 +49,9 @@ header('Content-Type: text/html; charset=utf-8');
                 <div class="row justify-content-center">
                     <div class="col-lg-6" id="instructions" >
                         <h2 >Usage & possible issues</h2>
-                        <p class="lead">Just enter your URL into the search bar. Please use this tool legally and responsibly.</p>
-                        <h4>Q: How do i ?</h4>
-                        <p class="mb-0">Dont even trip dude</p>
+                        <p class="lead">Just enter your URL into the search bar and press Enter or click the small button next to the input field. The program will scan everything for you and show you the results on the next page. Please use this tool legally and responsibly.</p>
+                        <h4>Q: How aggressive is this scan ?</h4>
+                        <p class="mb-0">The most agressive thing scan does is gets the few directories of the website. That being said its pretty non-agressive (no portscanning, long list dirbusting, advanced fuzzing, ...). This however doesnt mean you should use it illegaly! </p>
                         <br>
                         <h4>Q: How do i ?</h4>
                         <p class="mb-0">Dont even trip dude</p>

@@ -1,0 +1,41 @@
+Add to Systems folder
+
+Lets add TextPattern CMS
+(Location : http://localhost/textpattern-4.8.7/ )
+
+::::::::::::
+
+Published with <a rel="external" href="https://textpattern.com/" title="Go to the Textpattern website">Textpattern CMS</a>
+
+OR
+
+Published with Textpattern CMS
+
+OR
+
+<meta name="generator" content="Textpattern CMS">
+
+OR
+
+[navigate to http://localhost/textpattern-4.8.7/README.txt ] and read out "Textpattern CMS 4.8.7"
+
+
+::::::::::::::::
+
+
+NEW HINT! : IN README = VERSIONS ?
+
+Now after adding a new file and changing up stuff ( i copied wordpress file and changed all  accordingly) just add it to your script's list of systems
+
+
+
+- check the return statements
+- fix up all the functions 
+- be careful
+
+
+
+
+
+
+

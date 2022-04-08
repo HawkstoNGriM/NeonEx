@@ -5,10 +5,8 @@ SimpleSSL
 All in One SEO
 AIOSEO
 Constant Contact
-OptinMonster
 SeedProd
 MemberPress
-UpdraftPlus
 WP Rocket
 Sucuri
 PushEngage
@@ -19,11 +17,9 @@ Google Workspace
 G suite
 SEMRush
 LiveChat
-Pretty Links Pro
 Yoast SEO
 Shared Counts
 WP Mail SMTP
-Insert Headers and Footers
 WPML
 WooCommerce
 Nextiva
@@ -37,7 +33,42 @@ Sugar Calendar
 WP 2FA
 Envira Gallery 
 Codeable
-
+All in One SEO  
+OptinMonster 
+TrustPulse 
+HubSpot
+Visualizer 
+Wholesale Suite
+W3 Total Cache 
+Pretty Links 
+LearnDash
+Smush 
+Better Click to Tweet 
+Instagram Feed 
+Soliloquy 
+Optimole
+Print, PDF, Email by PrintFriendly 
+WP RSS Aggregator 
+Insert Headers and Footers 
+Simple Author Box 
+Duplicator
+Shortcodes Ultimate 
+Broken Link Checker 
+Easy Google Fonts 
+Really Simple SSL 
+Autoptimize 
+Login Lockdown
+WordPress Importer
+Disable Comments
+WP Optimize 
+Editorial Calendar
+Code Snippets 
+Redirection 
+Advanced Custom Fields 
+Enable Media Replace
+UpdraftPlus 
+WP Call Button
+WP Product Review 
 
 
 

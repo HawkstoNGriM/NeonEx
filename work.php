@@ -15,7 +15,7 @@ require "csvReaderForExploits.php";
 require "plugindetector.php";
 
 $cmsfound = "";
-
+$foundCVEs = array();
 ?>
 <head>
     <meta charset="utf-8" />
@@ -74,7 +74,7 @@ $cmsfound = "";
                     if ($cms->getResult()) {
                         
                         @$cmsfound = $cms->getResult();
-                    
+                        
                         echo "<b class='alert alert-dark' style='margin-left:1%;'>[+] Detected CMS: <u>" . $cmsfound . "</u> </b>";
 
                         //do cve detection - try nd get cve number from cmsfound
@@ -97,10 +97,71 @@ $cmsfound = "";
                 echo "<p class='alert alert-dark' style='padding:5; margin-left:1%; margin-right:2%;'> Detected Version:" . $versionFound . "</p>";
 
                 echo "<hr>";
-                echo " UNCOMMENT ME ! <br/>";
-                #findInCsv($cmsfound,"3.0","Resources/files_exploits.csv");
+
+
+                echo " UNCOMMENT ME (x2) ! <br/>";
+                echo "<h4 class='alert alert-dark' style='padding:5; margin-left:1%; margin-right:2%;'> CSV Search </h4>";
+                
+                /*
+                $printvar_expl = findInCsv($cmsfound,"3.0","Resources/files_exploits.csv");
+                $countery = 0;
+                foreach($printvar_expl as $pve){
+                    #divide into seperate arrays
+                    if($countery == 0){
+                        echo "<br/><h4>Possible Exploits</h4><hr/>";
+                        echo "<br/>";
+                    } else if ($countery == 1) {
+                        echo "<br/><h4>Possible Related Exploits</h4><hr/>";
+                        echo "<br/>";
+                    }
+                    foreach($pve as $v){
+                        #"- -" in $v
+                        if(str_contains($v, "- -")){
+                            $explNumForUrl = explode("- -",$v);
+                            $explNumForUrl = $explNumForUrl[1];
+                            $explNumForUrl = explode("/",$explNumForUrl);
+                            $explNumForUrl = end($explNumForUrl);
+                            #should get the last thing - number 
+                            $explNumForUrl = explode(".",$explNumForUrl);
+                            $explNumForUrl = $explNumForUrl[0];
+                            #cause 89213.txt 
+                            #we just need the number
+
+                            $refForExploit = "<a href='https://www.exploit-db.com/exploits/" . $explNumForUrl . "'> Exploit </a>";
+                        }else {
+                            $refForExploit = "";
+                        }
+                        echo $v . " " . $refForExploit . "<br/>";
+                    
+                    }
+                    $countery += 1;
+                }
+                */
+                
                 echo  "<hr/> <br/>";
-                #findInCsvx($cmsfound,"3.0","Resources/allCVEs2022.csv");
+                /* 
+                $printvar_cves = findInCsvx($cmsfound,"3.0","Resources/allCVEs2022.csv");
+                $counterx = 0;
+                foreach($printvar_cves as $pvc){
+                    #divide into seperate arrays
+                    if($counterx == 0){
+                        echo "<h4>Possible Vulnerabilities</h4><hr/>";
+                        echo "<br/>";
+                    } else if ($counterx == 1){
+                        echo "<h4>Possible Related Vulnerabilities</h4><hr/>";
+                        echo "<br/>";
+                    }
+
+                    foreach($pvc as $p){
+                        echo $p;
+                        #seperate all cves into array for later:
+                        #preg_match("CVE\-\d+\-\d+", $printvar_cves, $foundCVEs);
+                    }
+                $counterx += 1;
+                }
+
+                */
+
             ?>
 
             <h4 class="alert alert-dark" style="margin-left:1%;">Plugins</h4>
@@ -125,7 +186,7 @@ $cmsfound = "";
             <br/>
             <h4 class="alert alert-dark">Possible Exploits</h4>
             <?php
-                echo "Attempting exploit finding for CMS : $cmsfound <br/><hr/>";
+                echo "Attempting exploit finding for CMS (Using APIs) : $cmsfound <br/><hr/>";
                 
                 if($cmsfound !== ""){
 
@@ -134,7 +195,7 @@ $cmsfound = "";
                     ////for version stuff:
                     //$cmsfoundplusversion = $cmsfound . " " . "3.0";
                     ////replace cmsfound          v       with $cmsfoundplusversion
-
+                    #$cmsfound = $cmsfound . " " . "3.0";
                     #$exploits = exploitFinder($cmsfound);
                     #foreach($exploits as $expl) {
                     #    echo $expl;
@@ -148,9 +209,22 @@ $cmsfound = "";
             ?>
             <br/><hr>
             <h4 class="alert alert-dark">Possible Fixes</h4>
-            <br>
-            <p>Fix me</p>
+            <?php 
+                if($cmsfound != ""){
+                    echo "<b>". $cmsfound . " Security fixes (options):</b> ";
+                    $link = "https://www.cvedetails.com/vulnerability-list/vendor_id-3496/$cmsfound.html";
+                    echo "<p> $cmsfound CVEs and their fixes: <a href=" . $link . "> Here </a>";
+                }
+                
 
+                echo "<br/>";
+                #print_r($foundCVEs);
+                #TODO - list of cves should be added here
+
+            ?>
+            <br/><br/>
+            <p><b>Or visit our </b> <a href="vulnfix.html"> Vulnerability Fixing Recommendations </a> site.  
+            <br/>
         </div>
 
     </div>
@@ -171,9 +245,15 @@ $cmsfound = "";
 </html>
 
 
+
+
+
+
+
+
+
+
 <!-- LOOK UP SPECIFIC CVE NUMBER DETAILS
-
-
 echo "<br/><b> Looking up CVEs for: " . $number . "</b><br/>";
         
                                     // GET REQUEST TO APIs - try one, if it doesnt work try other

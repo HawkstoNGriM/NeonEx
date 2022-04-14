@@ -40,7 +40,8 @@ function pluginDetect($site,$cms){
         $data = explode("\n",$data);
         foreach($data as $d){
             if(str_contains($site,$d) && $d !== " " && $d !== "" ){
-                echo " ⌚" . $d . " ; " ;  
+                #print_r($d);
+                echo "&nbsp; ⌚" . $d . "  <a href='exploitFinder.php?query=$d'> ⛓ Search Exploits ⛓ </a>" ;  
             }
         }
     }
@@ -79,9 +80,9 @@ function pluginDetect($site,$cms){
                                 #remove html stuff
                                 if(str_contains($pluginName, $possiblePluginNames[3])){
                                     //its a theme
-                                    $reallyTinyPart = " - " . $pluginName . " #" . "<a href='./exploitFinder.php?query=". $reallyTinyPart . "'>Search Exploit </a>". $reallyTinyPart . "<br/>" ;
+                                    $reallyTinyPart = " -<b>  " . $pluginName . " - </b>". $reallyTinyPart . "<br/>" ;
                                 }else {
-                                    $reallyTinyPart = " -<b> " . $pluginName . " #</b>" . "<a href='./exploitFinder.php?query=". $reallyTinyPart . "'>Search Exploit </a>". $reallyTinyPart . "<br/>" ;
+                                    $reallyTinyPart = " -<b> " . $pluginName . " - </b>" .  $reallyTinyPart . "<br/>" ;
                                 }
                                 
                                 

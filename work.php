@@ -4,6 +4,9 @@
 #detects cms
 require "DetectCMS.php";
 
+#require version detection
+require "versionDetect.php";
+
 #finds exploits for query type "wordpress" 
 require "exploitFinder.php";
 
@@ -13,6 +16,9 @@ require "csvReaderForExploits.php";
 
 #require plugindetector
 require "plugindetector.php";
+
+
+
 
 $cmsfound = "";
 $foundCVEs = array();
@@ -93,8 +99,9 @@ $foundCVEs = array();
 
                 echo "<br><hr>";
 
-                $versionFound = " xCall functionx ";
-                echo "<p class='alert alert-dark' style='padding:5; margin-left:1%; margin-right:2%;'> Detected Version:" . $versionFound . "</p>";
+                
+                $versionFound = versionDetectorFunction($detectCMS,$cmsfound);
+                echo "<p class='alert alert-dark' style='padding:5; margin-left:1%; margin-right:2%;'> Detected Version: <b>" . $versionFound . "</b> </p>";
 
                 echo "<hr>";
 
@@ -213,13 +220,30 @@ $foundCVEs = array();
                 if($cmsfound != ""){
                     echo "<b>". $cmsfound . " Security fixes (options):</b> ";
                     $link = "https://www.cvedetails.com/vulnerability-list/vendor_id-3496/$cmsfound.html";
-                    echo "<p> $cmsfound CVEs and their fixes: <a href=" . $link . "> Here </a>";
-                }
-                
+                    echo "<p> $cmsfound CVEs and their descriptions: <a href=" . $link . "> Here </a></p>";
+                    echo "<p> Latest advisories : </p>";
 
-                echo "<br/>";
-                #print_r($foundCVEs);
-                #TODO - list of cves should be added here
+                    echo "UNCOMMENT ME   ";
+                    #parse XML
+                    /*
+                    try {
+                        $advisories = file_get_contents("https://rss.packetstormsecurity.com/files/tags/advisory/");
+                        $xml = simplexml_load_string($advisories);
+                        if ($xml === false) {
+                          echo "Didnt find keyword. Showing general advisories : " . "<a href='https://rss.packetstormsecurity.com/files/tags/advisory/'> Here </a>";
+                        } else {
+                          print_r($xml);
+                          #TODO 
+
+                        }
+                    } catch(Exception $e){
+                        echo $e;
+                    }
+                    */
+
+                    
+                }
+
 
             ?>
             <br/><br/>

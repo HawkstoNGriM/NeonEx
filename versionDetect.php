@@ -11,7 +11,7 @@ function versionDetectorFunction($url, $cms){
     ];
 
     //echo $url . " has " . $cms . " ... Detecting version for it. <br/>";
-    echo "<br/>Detecting the version for CMS...</br>";
+    #echo "<br/>Detecting the version for CMS...</br>";
 
     $versionSource = "";
     foreach($systems as $s){
@@ -26,9 +26,9 @@ function versionDetectorFunction($url, $cms){
         
     }
     if($versionSource !== ""){
-
-        // TODO 
-        // IMPLEMETN VERSION DETECTION FOR EACH CMS
+        #WP - DONE
+        #JOOM - DONE
+        #Textpattern - Not done
 
         if($versionSource == $systems[0]){
             echo "<br/>";
@@ -58,28 +58,19 @@ function versionDetectorFunction($url, $cms){
                     $url2 = str_replace("content=","",$url2[0]);
                     $url2 = str_replace('"',"",$url2);
                     #yeah but it still gives " Wordpress 5.9 Wordpress 5.9"
-                    #so lets
+                    #No it doesnt it runs it twice cause for loop - solved with return
                     $url2 = str_replace(strtolower($versionSource),"",strtolower($url2));
-                    
-                    if(str_contains($url2, " ") ){
-                        $url2 = explode(" ",$url2);
-                        $url2 = array_unique($url2);
-                        //STOPPED HEREE
-                        #vraca neke cudne arrayeve u arrayevima
-                        #umjesto normalno
-                    }
-                    print_r($url2);
 
+                    if(str_contains($url2, " ")){
+                        $url2 = str_replace(" ", "", $url2);
+                    }
+                    if($url2 != ""){
+                        return $url2;
+                    }
+                
                 }
 
-
             }
-            
-            #$response = file_get_contents($url);
-
-
-
-
         }
 
         if($versionSource == $systems[1]){
@@ -91,7 +82,7 @@ function versionDetectorFunction($url, $cms){
             }  
 
             $options = ["/administrator/manifests/files/joomla.xml","/includes/version.php","/libraries/joomla/version.php","/libraries/cms/version/version.php","/", "/README.txt"];
-            
+            $final_joomla_version = "";
             foreach($options as $option){
                 $url2 = $url . $option;
                 //echo "Trying :" . $url2 . "<br/>";
@@ -106,20 +97,16 @@ function versionDetectorFunction($url, $cms){
                         //the IF statements lower are if, elseif -type 
                         //reason for this is we dont wanna detect version 10 times
                     
-
                         //check the xml if its it 
                         if(str_contains(strtolower($response), "version")){
                             //maybe its version=3.10.4
                             //and maybe its <version>3.10.4</version>
-                            //echo $response;
                             $response = html_entity_decode($response);
                             if(str_contains($response,"</version")){
                                 $response = explode("</version>",$response);
                                 $versionDirty = explode("<version>", $response[0]);
-                                echo "<br> Version :<br/>" . $versionDirty[1] . "<hr/>"; 
+                                $final_joomla_version = $versionDirty[1]; 
                             }
-
-
                         }
                         else if(str_contains(strtolower($response), "version history")){
                             //ITS A README.txt
@@ -139,11 +126,15 @@ function versionDetectorFunction($url, $cms){
                                     $versionDirty = str_replace(' ', '', $versionDirty[1]);
                                 }
                             }
-                            echo $versionDirty;
+                            $final_joomla_version = $versionDirty;
                             
 
 
                             echo "";
+                        }
+                        else {
+                            #echo "Couldnt find version in available files.";
+                            #it has to be a pass cause loop
                         }
 
                     }
@@ -153,7 +144,7 @@ function versionDetectorFunction($url, $cms){
                 }
             }
 
-
+            return $final_joomla_version;
 
         }
         
@@ -204,14 +195,14 @@ function versionDetectorFunction($url, $cms){
     
     }
     else{
-        echo "Couldnt find the right system in the list of versionDetect class.";
+        echo " Couldnt find the right system in the list of versionDetect class.";
     }
 
 
 }
 
-versionDetectorFunction("http://localhost/wordp/","Wordpress ");
-
+#$data = versionDetectorFunction("http://localhost/wordp/","wordpress ");
+#echo $data;
 
     
 

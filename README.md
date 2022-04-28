@@ -2,13 +2,13 @@
 A platform for CMS version detection, exploit suggestion and CVE display based on vulnerability.
 
 # DO NOT CLONE, This is still a work in progress !!
+> Missing dependencies rn, dont clone.
+> (missing Resources folder, 300mb)
 
 # Dependencies 
-a bunch
-0day-today scraper thing 
-exploitdb-master with its datasets
-cve search dataset csv 
-a bunch of my scripts
+-Resources folder - includes:
+>exploits and cves CSV files
+-a bunch of my scripts
 
 # Aggressiveness
 This scanner DOES NOT scan for ports, it DOES NOT dirbust/dirb/ , it DOES NOT attempt injections - it is a passive scanner (it only sends few requests to your website, so far max i've seen is 10, usually its around 5-6) and therefore it is safer and easier on the website load. 

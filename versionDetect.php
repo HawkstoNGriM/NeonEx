@@ -65,9 +65,13 @@ function versionDetectorFunction($url, $cms){
                         $url2 = str_replace(" ", "", $url2);
                     }
                     if($url2 != ""){
-                        return $url2;
+                        if(str_contains(strtolower($url2),strtolower("wpml"))){
+                        }else{
+                            return $url2;
+                        }
+                        
                     }
-                
+                    return "";
                 }
 
             }
@@ -81,7 +85,7 @@ function versionDetectorFunction($url, $cms){
                 #remove slash
             }  
 
-            $options = ["/administrator/manifests/files/joomla.xml","/includes/version.php","/libraries/joomla/version.php","/libraries/cms/version/version.php","/", "/README.txt"];
+            $options = ["/administrator/manifests/files/joomla.xml","/includes/version.php","/libraries/joomla/version.php","/libraries/cms/version/version.php","/index.php", "/README.txt"];
             $final_joomla_version = "";
             foreach($options as $option){
                 $url2 = $url . $option;
@@ -131,6 +135,25 @@ function versionDetectorFunction($url, $cms){
 
 
                             echo "";
+                        } else if(str_contains(strtolower($response), 'meta name=')){
+                            #  <meta name="generator" content="Joomla! 1.5 - Open Source Content Management" />
+                            $response = html_entity_decode($response);
+                            $response = explode("meta name=",$response);
+                            foreach($response as $rsp){
+                                if(str_contains($rsp, "generator")){
+                                    $rsp = explode("content=",$rsp);
+                                    foreach($rsp as $r){
+                                        if(str_contains(strtolower($r), strtolower("Joomla!"))){
+                                            $r = explode("Joomla!", $r);
+                                            $r = $r[1];
+                                            $r = explode("- Open", $r);
+                                            $r = $r[0];
+                                            $final_joomla_version = $r;
+                                        }
+                                    }
+                                }
+                            }
+                        
                         }
                         else {
                             #echo "Couldnt find version in available files.";
@@ -153,7 +176,7 @@ function versionDetectorFunction($url, $cms){
             #http://localhost/textpattern-4.8.7/textpattern/textpattern.js
             #http://localhost/textpattern-4.8.7/README.txt
 
-            echo "<br/>";
+            #echo "<br/>";
             #System : TextPattern
 
             if(str_ends_with($url, "/")){
@@ -174,7 +197,9 @@ function versionDetectorFunction($url, $cms){
                         $result = explode("CMS",$result[0]);
                         $result = $result[1];
                         $result = str_replace(" ", "",$result);
-                        echo "<br> Version :<br/>" . $result . "<hr/>"; 
+                        if($result !== ""){
+                            return $result;
+                        }
                     }
                 }
                 if($option == $options[1] || $option == $option[2]){
@@ -184,7 +209,10 @@ function versionDetectorFunction($url, $cms){
                         $result = explode("';",$result[1]);
                         $result = $result[0];
                         $result = str_replace("'","",$result);
-                        echo "<br> Version :<br/>" . $result . "<hr/>";
+                        if($result !== ""){
+                            return $result;
+                        }
+                        
                     }
                 }
 
@@ -201,7 +229,7 @@ function versionDetectorFunction($url, $cms){
 
 }
 
-#$data = versionDetectorFunction("http://localhost/wordp/","wordpress ");
+#$data = versionDetectorFunction("http://localhost/joom/"," Joomla ");
 #echo $data;
 
     

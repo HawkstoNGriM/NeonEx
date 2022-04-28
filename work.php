@@ -53,6 +53,8 @@ $foundCVEs = array();
                     if (isset($_GET["site"])) {
                         $site = $_GET["site"];
                         echo  $site ;
+                    }else{
+                        echo "GET not set.";
                     }
                     ?>
             </h4>
@@ -62,11 +64,19 @@ $foundCVEs = array();
 
 
             <?php
+
+                $detectCMS = "";
+                $cmsfound = "";
                 if(isset($_GET["site"])){
+                    
                     $detectCMS = $_GET["site"];
                     //echo "<p > Detecting CMS for ... " .  $detectCMS . " ...</p>" ;
                     
+
+                    # THE WHOLE THING BREAKS HERE
+                    
                     try{
+                        
                         @$cms = new DetectCMS\DetectCMS($detectCMS);
                         //on linux (lampp xampp) this passes
                         //it doesnt go to Error 
@@ -75,12 +85,14 @@ $foundCVEs = array();
                     catch (Exception $e) {
                         echo "Error:" . $e;
                     }
-                    
-                    
+
+                    # THE WHOLE THING BREAKS HERE
+
+
                     if ($cms->getResult()) {
-                        
+
                         @$cmsfound = $cms->getResult();
-                        
+
                         echo "<b class='alert alert-dark' style='margin-left:1%;'>[+] Detected CMS: <u>" . $cmsfound . "</u> </b>";
 
                         //do cve detection - try nd get cve number from cmsfound
@@ -88,19 +100,22 @@ $foundCVEs = array();
                 
                     
                     } else {
-                        echo "<br/>Couldnt detect CMS. ";
+                        echo "<br/>Couldnt detect CMS.. ";
                     }
                     
                     
                 } else{
-                    $detectCMS = "Couldnt detect CMS. Something went wrong with the detection module.";
-                    echo $detectCMS;
+                    echo "<br/>Couldnt detect CMS. ";
                 }
 
                 echo "<br><hr>";
-
+                if($cmsfound !== "" && $detectCMS !== ""){
+                    $versionFound = versionDetectorFunction($detectCMS,$cmsfound);
+                }else {
+                    echo "<br/> DetectCMS or CMSfound variables seem empty.";
+                }
                 
-                $versionFound = versionDetectorFunction($detectCMS,$cmsfound);
+
                 echo "<p class='alert alert-dark' style='padding:5; margin-left:1%; margin-right:2%;'> Detected Version: <b>" . $versionFound . "</b> </p>";
 
                 echo "<hr>";
@@ -146,7 +161,7 @@ $foundCVEs = array();
                 */
                 
                 echo  "<hr/> <br/>";
-                /* 
+                /*
                 $printvar_cves = findInCsvx($cmsfound,"3.0","Resources/allCVEs2022.csv");
                 $counterx = 0;
                 foreach($printvar_cves as $pvc){
@@ -175,7 +190,7 @@ $foundCVEs = array();
             <p><i><b>[ Hint ]</b> This website scan isn't agressive. This type of detection only displays SOME/Possible plugins.</i></p>
             <?php 
             if (isset($_GET["site"])) {
-                echo "UNCOMMENT ME";
+                #echo "UNCOMMENT ME";
                 #$site = $_GET["site"];
                 #$resultPlugin = pluginDetect($site,$cmsfound);
                 #echo $resultPlugin;
@@ -218,35 +233,47 @@ $foundCVEs = array();
             <h4 class="alert alert-dark">Possible Fixes</h4>
             <?php 
                 if($cmsfound != ""){
-                    echo "<b>". $cmsfound . " Security fixes (options):</b> ";
+                    #echo "<b>". $cmsfound . " Security fixes (options):</b> ";
                     $link = "https://www.cvedetails.com/vulnerability-list/vendor_id-3496/$cmsfound.html";
-                    echo "<p> $cmsfound CVEs and their descriptions: <a href=" . $link . "> Here </a></p>";
-                    echo "<p> Latest advisories : </p>";
+                    echo "<p> <b> $cmsfound </b> CVEs and their descriptions: <a target=_blank href=" . $link . "> Here </a></p>";
+                    
 
                     echo "UNCOMMENT ME   ";
-                    #parse XML
                     /*
                     try {
-                        $advisories = file_get_contents("https://rss.packetstormsecurity.com/files/tags/advisory/");
-                        $xml = simplexml_load_string($advisories);
-                        if ($xml === false) {
-                          echo "Didnt find keyword. Showing general advisories : " . "<a href='https://rss.packetstormsecurity.com/files/tags/advisory/'> Here </a>";
-                        } else {
-                          print_r($xml);
-                          #TODO 
+                            $advisories = file_get_contents("https://rss.packetstormsecurity.com/files/tags/advisory/$cmsfound");
+                            $xml = simplexml_load_string($advisories);
+                            if ($xml === false) {
+                                echo "No data loaded. General advisories : " . "<a href='https://rss.packetstormsecurity.com/files/tags/advisory/'> Here </a>";
+                            } else {
+                                echo "<p> Latest advisories from PacketStorm : </p>";
+                                foreach($xml as $entry){
+                                    foreach($entry as $en){
+                                        #print_r($en);
+                                        if($en->title !== ""){
+                                            if($en->link != "" && $en->title != "" && $en->title != "Packet Storm"){
+                                                echo "🌀: " . $en->title . " <a target=_blank href='". $en->link ."'>╔SOURCE╗</a> - 🗄:". $en->description . "<hr/>";
+                                            }
+                                            
 
-                        }
-                    } catch(Exception $e){
-                        echo $e;
+                                        }
+                                        
+                                    }
+                                } 
+
+                            }
+                        } catch(Exception $e){
+                            echo $e;
                     }
-                    */
 
+                    */
                     
                 }
 
 
             ?>
-            <br/><br/>
+            <br/>
+            <br/>
             <p><b>Or visit our </b> <a href="vulnfix.html"> Vulnerability Fixing Recommendations </a> site.  
             <br/>
         </div>

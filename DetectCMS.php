@@ -95,11 +95,22 @@ class DetectCMS
             foreach ($system->methods as $method) {
 
                 if (!in_array($method, $this->common_methods)) {
-
-                    if ($system->$method()) {
-                        return $system_name;
-
+                    
+                    try{
+                        #print_r($method);
+                        if($system->$method()){
+                            return $system_name;
+                        }
+                        
+                        #returns Drupal even when it isnt drupal
+                        #since system calls method 
+                    } catch(exception $dmn){
+                        echo "<p hidden> Error" . $dmn . "</p>";
+                        #ADDED this try and catch cause on Drupal it Fails
+                        #and bricks everything
                     }
+
+
 
                 }
 

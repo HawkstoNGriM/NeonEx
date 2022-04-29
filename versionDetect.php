@@ -26,9 +26,6 @@ function versionDetectorFunction($url, $cms){
         
     }
     if($versionSource !== ""){
-        #WP - DONE
-        #JOOM - DONE
-        #Textpattern - Not done
 
         if($versionSource == $systems[0]){
             echo "<br/>";
@@ -110,6 +107,7 @@ function versionDetectorFunction($url, $cms){
                                 $response = explode("</version>",$response);
                                 $versionDirty = explode("<version>", $response[0]);
                                 $final_joomla_version = $versionDirty[1]; 
+                                return $final_joomla_version;
                             }
                         }
                         else if(str_contains(strtolower($response), "version history")){
@@ -131,7 +129,7 @@ function versionDetectorFunction($url, $cms){
                                 }
                             }
                             $final_joomla_version = $versionDirty;
-                            
+                            return $final_joomla_version;
 
 
                             echo "";
@@ -149,6 +147,7 @@ function versionDetectorFunction($url, $cms){
                                             $r = explode("- Open", $r);
                                             $r = $r[0];
                                             $final_joomla_version = $r;
+                                            return $final_joomla_version;
                                         }
                                     }
                                 }
@@ -167,7 +166,7 @@ function versionDetectorFunction($url, $cms){
                 }
             }
 
-            return $final_joomla_version;
+            #return $final_joomla_version;
 
         }
         

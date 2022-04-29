@@ -112,7 +112,7 @@ $foundCVEs = array();
                 if($cmsfound !== "" && $detectCMS !== ""){
                     $versionFound = versionDetectorFunction($detectCMS,$cmsfound);
                 }else {
-                    echo "<br/> DetectCMS or CMSfound variables seem empty.";
+                    echo "<br/> DetectCMS or CMSfound variables seem empty. Cant detect version.";
                 }
                 
 
@@ -123,9 +123,14 @@ $foundCVEs = array();
 
                 echo " UNCOMMENT ME (x2) ! <br/>";
                 echo "<h4 class='alert alert-dark' style='padding:5; margin-left:1%; margin-right:2%;'> CSV Search </h4>";
-                
+                //SEGMENT
                 /*
-                $printvar_expl = findInCsv($cmsfound,"3.0","Resources/files_exploits.csv");
+                if($versionFound !== "" && strlen($versionFound) > 0){
+                    $printvar_expl = findInCsv($cmsfound,$versionFound,"Resources/files_exploits.csv");
+                }else{
+                    echo "<p hidden> Couldnt detect version, running general search</p>";
+                    $printvar_expl = findInCsv($cmsfound,"","Resources/files_exploits.csv");
+                }
                 $countery = 0;
                 foreach($printvar_expl as $pve){
                     #divide into seperate arrays
@@ -159,10 +164,17 @@ $foundCVEs = array();
                     $countery += 1;
                 }
                 */
-                
+                //SEGMENT
                 echo  "<hr/> <br/>";
+                //SEGMENT
                 /*
-                $printvar_cves = findInCsvx($cmsfound,"3.0","Resources/allCVEs2022.csv");
+                if($versionFound !== "" && strlen($versionFound) > 0){
+                    $printvar_cves = findInCsvx($cmsfound,$versionFound,"Resources/allCVEs2022.csv");
+                }else{
+                    echo "<p hidden> Couldnt detect version, running general search</p>";
+                    $printvar_cves = findInCsvx($cmsfound,"","Resources/allCVEs2022.csv");
+                }
+                
                 $counterx = 0;
                 foreach($printvar_cves as $pvc){
                     #divide into seperate arrays
@@ -181,8 +193,9 @@ $foundCVEs = array();
                     }
                 $counterx += 1;
                 }
-
                 */
+                
+                //SEGMENT
 
             ?>
 
@@ -190,10 +203,12 @@ $foundCVEs = array();
             <p><i><b>[ Hint ]</b> This website scan isn't agressive. This type of detection only displays SOME/Possible plugins.</i></p>
             <?php 
             if (isset($_GET["site"])) {
-                #echo "UNCOMMENT ME";
+                echo "UNCOMMENT ME";
+                //SEGMENT
                 #$site = $_GET["site"];
                 #$resultPlugin = pluginDetect($site,$cmsfound);
                 #echo $resultPlugin;
+                //SEGMENT
 
 
             }
@@ -214,14 +229,19 @@ $foundCVEs = array();
 
                     echo "<br/> UNCOMMENT ME <br/>";
 
-                    ////for version stuff:
-                    //$cmsfoundplusversion = $cmsfound . " " . "3.0";
-                    ////replace cmsfound          v       with $cmsfoundplusversion
-                    #$cmsfound = $cmsfound . " " . "3.0";
-                    #$exploits = exploitFinder($cmsfound);
-                    #foreach($exploits as $expl) {
-                    #    echo $expl;
-                    #}
+                    //SEGMENT
+                    /*
+                    if($versionFound !== "" && strlen($versionFound) > 0){
+                        $cmsfoundplusversion = $cmsfound . " " . $versionFound;
+                    }else{
+                        $cmsfoundplusversion = $cmsfound;
+                    }
+                    $exploits = exploitFinder($cmsfoundplusversion);
+                    foreach($exploits as $expl) {
+                        echo $expl;
+                    }
+                    */
+                    //SEGMENT
 
                 }
                 else {
@@ -239,6 +259,7 @@ $foundCVEs = array();
                     
 
                     echo "UNCOMMENT ME   ";
+                    //SEGMENT
                     /*
                     try {
                             $advisories = file_get_contents("https://rss.packetstormsecurity.com/files/tags/advisory/$cmsfound");
@@ -246,7 +267,7 @@ $foundCVEs = array();
                             if ($xml === false) {
                                 echo "No data loaded. General advisories : " . "<a href='https://rss.packetstormsecurity.com/files/tags/advisory/'> Here </a>";
                             } else {
-                                echo "<p> Latest advisories from PacketStorm : </p>";
+                                echo "<p> Latest advisories (ignores CMS version) from PacketStorm : </p>";
                                 foreach($xml as $entry){
                                     foreach($entry as $en){
                                         #print_r($en);
@@ -267,6 +288,7 @@ $foundCVEs = array();
                     }
 
                     */
+                    //SEGMENT
                     
                 }
 

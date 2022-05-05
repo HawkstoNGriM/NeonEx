@@ -121,100 +121,87 @@ $foundCVEs = array();
                 echo "<hr>";
 
 
-                echo " UNCOMMENT ME (x2) ! <br/>";
+                #echo " UNCOMMENT ME (x2) ! <br/>";
                 echo "<h4 class='alert alert-dark' style='padding:5; margin-left:1%; margin-right:2%;'> CSV Search </h4>";
                 //SEGMENT
-                /*
-                if($versionFound !== "" && strlen($versionFound) > 0){
-                    $printvar_expl = findInCsv($cmsfound,$versionFound,"Resources/files_exploits.csv");
-                }else{
-                    echo "<p hidden> Couldnt detect version, running general search</p>";
-                    $printvar_expl = findInCsv($cmsfound,"","Resources/files_exploits.csv");
-                }
-                $countery = 0;
-                foreach($printvar_expl as $pve){
-                    #divide into seperate arrays
-                    if($countery == 0){
-                        echo "<br/><h4>Possible Exploits</h4><hr/>";
-                        echo "<br/>";
-                    } else if ($countery == 1) {
-                        echo "<br/><h4>Possible Related Exploits</h4><hr/>";
-                        echo "<br/>";
+                try{
+                    if($versionFound !== "" && strlen($versionFound) > 0){
+                        $printvar_expl = findInCsv($cmsfound,$versionFound,"Resources/files_exploits.csv");
+                    }else{
+                        echo "<p hidden> Couldnt detect version, running general search</p>";
+                        $printvar_expl = findInCsv($cmsfound,"","Resources/files_exploits.csv");
                     }
-                    foreach($pve as $v){
-                        #"- -" in $v
-                        if(str_contains($v, "- -")){
-                            $explNumForUrl = explode("- -",$v);
-                            $explNumForUrl = $explNumForUrl[1];
-                            $explNumForUrl = explode("/",$explNumForUrl);
-                            $explNumForUrl = end($explNumForUrl);
-                            #should get the last thing - number 
-                            $explNumForUrl = explode(".",$explNumForUrl);
-                            $explNumForUrl = $explNumForUrl[0];
-                            #cause 89213.txt 
-                            #we just need the number
-
-                            $refForExploit = "<a href='https://www.exploit-db.com/exploits/" . $explNumForUrl . "'> Exploit </a>";
-                        }else {
-                            $refForExploit = "";
+                    $countery = 0;
+                    foreach($printvar_expl as $pve){
+                        #divide into seperate arrays
+                        if($countery == 0){
+                            echo "<br/><h4>Possible Exploits</h4><hr/>";
+                        } else if ($countery == 1) {
+                            echo "<br/><h4>Possible Related Exploits</h4><hr/>";
                         }
-                        echo $v . " " . $refForExploit . "<br/>";
-                    
-                    }
-                    $countery += 1;
-                }
-                */
-                //SEGMENT
-                echo  "<hr/> <br/>";
-                //SEGMENT
-                /*
-                if($versionFound !== "" && strlen($versionFound) > 0){
-                    $printvar_cves = findInCsvx($cmsfound,$versionFound,"Resources/allCVEs2022.csv");
-                }else{
-                    echo "<p hidden> Couldnt detect version, running general search</p>";
-                    $printvar_cves = findInCsvx($cmsfound,"","Resources/allCVEs2022.csv");
-                }
-                
-                $counterx = 0;
-                foreach($printvar_cves as $pvc){
-                    #divide into seperate arrays
-                    if($counterx == 0){
-                        echo "<h4>Possible Vulnerabilities</h4><hr/>";
-                        echo "<br/>";
-                    } else if ($counterx == 1){
-                        echo "<h4>Possible Related Vulnerabilities</h4><hr/>";
-                        echo "<br/>";
-                    }
+                        foreach($pve as $v){
+                            #"- -" in $v
+                            if(str_contains($v, "- -")){
+                                $explNumForUrl = explode("- -",$v);
+                                $explNumForUrl = $explNumForUrl[1];
+                                $explNumForUrl = explode("/",$explNumForUrl);
+                                $explNumForUrl = end($explNumForUrl);
+                                #should get the last thing - number 
+                                $explNumForUrl = explode(".",$explNumForUrl);
+                                $explNumForUrl = $explNumForUrl[0];
+                                #cause 89213.txt 
+                                #we just need the number
 
-                    foreach($pvc as $p){
-                        echo $p;
-                        #seperate all cves into array for later:
-                        #preg_match("CVE\-\d+\-\d+", $printvar_cves, $foundCVEs);
+                                $refForExploit = "<a href='https://www.exploit-db.com/exploits/" . $explNumForUrl . "'> Exploit </a>";
+                            }else {
+                                $refForExploit = "";
+                            }
+                            echo $v . " " . $refForExploit . "<br/>";
+                        
+                        }
+                        $countery += 1;
                     }
-                $counterx += 1;
+                } catch(Exception $xr){
+                    echo "<br/> $xr";
                 }
-                */
-                
+                //SEGMENT
+                echo  "<hr/>";
+                //SEGMENT
+                try{
+                    if($versionFound !== "" && strlen($versionFound) > 0){
+                        $printvar_cves = findInCsvx($cmsfound,$versionFound,"Resources/allCVEs2022.csv");
+                    }else{
+                        echo "<p hidden> Couldnt detect version, running general search</p>";
+                        $printvar_cves = findInCsvx($cmsfound,"","Resources/allCVEs2022.csv");
+                    }
+                    
+                    $counterx = 0;
+                    foreach($printvar_cves as $pvc){
+                        #divide into seperate arrays
+                        if($counterx == 0){
+                            echo "<br/>";
+                            echo "<h4>Possible Vulnerabilities</h4><hr/>";
+                        } else if ($counterx == 1){
+                            echo "<br/>";
+                            echo "<h4>Possible Related Vulnerabilities</h4><hr/>";
+                        }
+
+                        foreach($pvc as $p){
+                            echo $p;
+                            #seperate all cves into array for later:
+                            #preg_match("CVE\-\d+\-\d+", $printvar_cves, $foundCVEs);
+                        }
+                    $counterx += 1;
+                    }
+                    
+                } catch(Exception $wrp){
+                    echo "<br/> $wrp";
+                }
                 //SEGMENT
 
             ?>
 
-            <h4 class="alert alert-dark" style="margin-left:1%;">Plugins</h4>
-            <p><i><b>[ Hint ]</b> This website scan isn't agressive. This type of detection only displays SOME/Possible plugins.</i></p>
-            <?php 
-            if (isset($_GET["site"])) {
-                echo "UNCOMMENT ME";
-                //SEGMENT
-                #$site = $_GET["site"];
-                #$resultPlugin = pluginDetect($site,$cmsfound);
-                #echo $resultPlugin;
-                //SEGMENT
-
-
-            }
-
-            ?>           
-            <br>
+           <!-- Plugins were here -->
 
 
         </div>
@@ -227,20 +214,28 @@ $foundCVEs = array();
                 
                 if($cmsfound !== ""){
 
-                    echo "<br/> UNCOMMENT ME <br/>";
+                    #echo "<br/> UNCOMMENT ME <br/>";
 
                     //SEGMENT
-                    /*
-                    if($versionFound !== "" && strlen($versionFound) > 0){
-                        $cmsfoundplusversion = $cmsfound . " " . $versionFound;
-                    }else{
-                        $cmsfoundplusversion = $cmsfound;
-                    }
-                    $exploits = exploitFinder($cmsfoundplusversion);
-                    foreach($exploits as $expl) {
-                        echo $expl;
-                    }
-                    */
+                    try{
+                        if($versionFound !== "" && strlen($versionFound) > 0){
+                            $cmsfoundplusversion = $cmsfound . " " . $versionFound;
+                        }else{
+                            $cmsfoundplusversion = $cmsfound;
+                        }
+                        $exploits = exploitFinder($cmsfoundplusversion);
+                        
+                        #print_r($exploits);
+                        foreach($exploits as $expl) {
+                            echo '<p style="font-size:10px;">';
+                            echo $expl;
+                            echo "<hr>";
+                            echo "</p>";
+                        }
+                    } catch(Exception $wpw){
+                        echo "<br/> $wpw";
+                    }   
+                    
                     //SEGMENT
 
                 }
@@ -250,6 +245,26 @@ $foundCVEs = array();
 
             ?>
             <br/><hr>
+
+            <h4 class="alert alert-dark" style="margin-left:1%;">Plugins</h4>
+            <?php 
+            if (isset($_GET["site"])) {
+                #echo "UNCOMMENT ME";
+                //SEGMENT
+                try{
+                    $siteToPlug = $_GET["site"];
+                    $resultPlugin = pluginDetect($siteToPlug,$cmsfound);
+                    echo $resultPlugin;
+                } catch(Exception $e){
+                    echo $e;
+                }
+                
+                //SEGMENT
+            }
+
+            ?>           
+            <br><hr>
+
             <h4 class="alert alert-dark">Possible Fixes</h4>
             <?php 
                 if($cmsfound != ""){
@@ -258,9 +273,9 @@ $foundCVEs = array();
                     echo "<p> <b> $cmsfound </b> CVEs and their descriptions: <a target=_blank href=" . $link . "> Here </a></p>";
                     
 
-                    echo "UNCOMMENT ME   ";
+                    #echo "UNCOMMENT ME   ";
                     //SEGMENT
-                    /*
+                    
                     try {
                             $advisories = file_get_contents("https://rss.packetstormsecurity.com/files/tags/advisory/$cmsfound");
                             $xml = simplexml_load_string($advisories);
@@ -287,7 +302,7 @@ $foundCVEs = array();
                             echo $e;
                     }
 
-                    */
+                    
                     //SEGMENT
                     
                 }

@@ -4,9 +4,13 @@
 function pluginDetect($site,$cms){
     //echo "CMS: " . $cms;
 
-
+    if($site !== "" && $cms !== ""){
+        $site = file_get_contents($site);
+    }
     //first lets get the reuqest 
-    $site = file_get_contents($site);
+    else {
+        echo "<br/>GET param or CMS detection variable empty.";
+    }
 
 
 
@@ -20,14 +24,14 @@ function pluginDetect($site,$cms){
         "Joomla",
         "Textpattern"
     ];
-
+    $dataset = "";
     if(strtolower($cms) == strtolower($systems[0])){
         #wordpress
         $dataset = "wp_popular_extensions_list.txt";
-    }else if(strtolower($cms) == strtolower($systems[1])){
+    }elseif(strtolower($cms) == strtolower($systems[1])){
         #joom
         $dataset = "joom_popular_extensions_list.txt";
-    }else if(strtolower($cms) == strtolower($system[2])){
+    }elseif(strtolower($cms) == strtolower($systems[2])){
         #textpattern
         $dataset = "textpattern_popular_extensions_list.txt";
     }else {

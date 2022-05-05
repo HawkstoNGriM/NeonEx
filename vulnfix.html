@@ -43,13 +43,22 @@ header('Content-Type: text/html; charset=utf-8');
                 <div class="row justify-content-center">
                     <div class="col-lg-6" id="instructions" >
                         <h2 >Best fix for my CMS vulnerability?</h2>
-                        <p class="lead">Just update it lol</p>
+                        <p class="lead">The best way to keep your CMS safer is to keep it updated. Same goes for your plugins. Before you do tho, make sure you make backups! Some CMS-es arent perfect at giving you your data back after the update.</p>
                         <br/>
-                        <h2 >How do i fix sql inj?</h2>
-                        <p class="lead">Just enter your URL into the search bar and press Enter or click the small button next to the input field. The program will scan everything for you and show you the results on the next page. Please use this tool legally and responsibly.</p>
+                        <h2 >How do i fix SQL injection, XSS or similar?</h2>
+                        <p class="lead">Usually input vulnerabilities are fixed by just sanitizing the input fields (like making sure some characters don't get accepted in the query), if they are URL based vulnerabilities or request based then you will need to do a bit more. As mentioned previously the best thing to do is to update the CMS, but if you can't do that you can sanitize the input field, URL params and Request params.</p>
                         <br/>
-                        <h2 >How do i fix XSS?</h2>
-                        <p class="lead">Just enter your URL into the search bar and press Enter or click the small button next to the input field. The program will scan everything for you and show you the results on the next page. Please use this tool legally and responsibly.</p>
+                        <h2 >How do i fix RCE vulnerabilities?</h2>
+                        <p class="lead">This is a more difficult one, it really depends where the code executes. If the code executes trough URLs then you can try to sanitize parameters or your scripts that take in those params. If you have a form that takes in text, that was broken by hackers to execute commands, then you just have to fix up that form so it doesn't execute the code in the given example.</p>
+                        <br/>
+                        <h2 >How do i fix LFI vulnerabilities?</h2>
+                        <p class="lead">Input sanitization (URL most oftenly). Disable any type of ".." . It should make things better. </p>
+                        <br/>
+                        <h2 >How do i fix DoS vulnerabilities?</h2>
+                        <p class="lead"> Since these can be a bit more complex it really depends, We'd recommend you look into the "path" attacker used to get to DoS since its often the case of getting from one vuln to DoS. As mentioned earlier: Update cures it all. Also check the script DoS was done with. </p>
+                        <br/>
+                        <h2 >Overall tips</h2>
+                        <p class="lead"> Always look at the server logs to see more details about the requests of the attacks.</p>
                         <br/>
 
                     </div>

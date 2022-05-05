@@ -53,8 +53,8 @@ header('Content-Type: text/html; charset=utf-8');
                         <h4>Q: How aggressive is this scan ?</h4>
                         <p class="mb-0">The most agressive thing scan does is gets the few directories of the website. That being said its pretty non-agressive (no portscanning, long list dirbusting, advanced fuzzing, ...). This however doesnt mean you should use it illegaly! </p>
                         <br>
-                        <h4>Q: How do i ?</h4>
-                        <p class="mb-0">Dont even trip dude</p>
+                        <h4>Q: What if NeonEx doesnt detect the version?</h4>
+                        <p class="mb-0">If NeonEx can't find the version it will look up general data on the CMS it detected. This information could be useful to bug bounty hunters. Don't worry tho, if you don't see the CMS you are scanning inside the Version Detect script, it means it wasnt added. Anyone knowing basic PHP can easily code their own version detection and add it. If it already is in the version detect script then the chances are either the script doesn't cover the option of detection OR more likely that it couldnt be detected (a lot of big sites hide their CMS version). </p>
 
                     </div>
                 </div>

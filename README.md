@@ -2,8 +2,9 @@
 A platform for CMS version detection, exploit suggestion and CVE display based on vulnerability.
 
 # Installation
-> You NEED to have your CSV datasets 
-> For this you can use Updater.sh 
+You NEED to have your CSV datasets 
+For this you can use Updater.sh 
+USE PHP 8 FOR THIS (and xampp accordingly)
 
 # Dependencies 
 - If you got both the .csv files using the updater or similar commands you are set to go!

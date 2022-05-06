@@ -5,6 +5,7 @@ A platform for CMS version detection, exploit suggestion and CVE display based o
 You NEED to have your CSV datasets 
 For this you can use Updater.sh 
 USE PHP 8 FOR THIS (and xampp accordingly)
+ALSO: use windows detectcms script for windows and linux for linux
 
 # Dependencies 
 - If you got both the .csv files using the updater or similar commands you are set to go!

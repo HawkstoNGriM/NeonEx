@@ -113,6 +113,7 @@ $foundCVEs = array();
                     $versionFound = versionDetectorFunction($detectCMS,$cmsfound);
                 }else {
                     echo "<br/> DetectCMS or CMSfound variables seem empty. Cant detect version.";
+                    $versionFound = "";
                 }
                 
 
@@ -127,7 +128,7 @@ $foundCVEs = array();
                 try{
                     if($versionFound !== "" && strlen($versionFound) > 0){
                         $printvar_expl = findInCsv($cmsfound,$versionFound,"Resources/files_exploits.csv");
-                    }else{
+                    }elseif ($cmsfound !== "" && strlen($cmsfound) > 0 ){
                         echo "<p hidden> Couldnt detect version, running general search</p>";
                         $printvar_expl = findInCsv($cmsfound,"","Resources/files_exploits.csv");
                     }
@@ -170,7 +171,7 @@ $foundCVEs = array();
                 try{
                     if($versionFound !== "" && strlen($versionFound) > 0){
                         $printvar_cves = findInCsvx($cmsfound,$versionFound,"Resources/allCVEs2022.csv");
-                    }else{
+                    }elseif ($cmsfound !== "" && strlen($cmsfound) > 0 ) {
                         echo "<p hidden> Couldnt detect version, running general search</p>";
                         $printvar_cves = findInCsvx($cmsfound,"","Resources/allCVEs2022.csv");
                     }
@@ -226,12 +227,15 @@ $foundCVEs = array();
                         $exploits = exploitFinder($cmsfoundplusversion);
                         
                         #print_r($exploits);
-                        foreach($exploits as $expl) {
-                            echo '<p style="font-size:10px;">';
-                            echo $expl;
-                            echo "<hr>";
-                            echo "</p>";
+                        if($exploits !== "" && count($exploits) > 0){
+                            foreach($exploits as $expl) {
+                                echo '<p style="font-size:10px;">';
+                                echo $expl;
+                                echo "<hr>";
+                                echo "</p>";
+                            }
                         }
+
                     } catch(Exception $wpw){
                         echo "<br/> $wpw";
                     }   
@@ -280,7 +284,7 @@ $foundCVEs = array();
                             $advisories = file_get_contents("https://rss.packetstormsecurity.com/files/tags/advisory/$cmsfound");
                             $xml = simplexml_load_string($advisories);
                             if ($xml === false) {
-                                echo "No data loaded. General advisories : " . "<a href='https://rss.packetstormsecurity.com/files/tags/advisory/'> Here </a>";
+                                echo "No advisories found for $cmsfound. ";
                             } else {
                                 echo "<p> Latest advisories (ignores CMS version) from PacketStorm : </p>";
                                 foreach($xml as $entry){
@@ -288,16 +292,19 @@ $foundCVEs = array();
                                         #print_r($en);
                                         if($en->title !== ""){
                                             if($en->link != "" && $en->title != "" && $en->title != "Packet Storm"){
-                                                echo "🌀: " . $en->title . " <a target=_blank href='". $en->link ."'>╔SOURCE╗</a> - 🗄:". $en->description . "<hr/>";
+                                                if(str_contains(strtolower($en->link),strtolower($cmsfound)) || str_contains(strtolower($en->title), strtolower($cmsfound))  ) {
+                                                    echo "🌀: " . $en->title . " <a target=_blank href='". $en->link ."'>╔SOURCE╗</a> - 🗄:". $en->description . "<hr/>";
+                                                } elseif(str_contains(strtolower($en->description), strtolower($cmsfound))){
+                                                    echo "🌀: " . $en->title . " <a target=_blank href='". $en->link ."'>╔SOURCE╗</a> - 🗄:". $en->description . "<hr/>";
+                                                }
+                                                
                                             }
-                                            
-
                                         }
                                         
                                     }
                                 } 
-
                             }
+                            echo "<b>General advisories</b> : " . "<a href='https://rss.packetstormsecurity.com/files/tags/advisory/'> Here </a>";
                         } catch(Exception $e){
                             echo $e;
                     }

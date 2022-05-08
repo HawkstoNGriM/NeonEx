@@ -83,7 +83,7 @@ $foundCVEs = array();
                         //but it doesnt show anything else either?
                     }
                     catch (Exception $e) {
-                        echo "Error:" . $e;
+                        echo "Couldnt detect CMS. <br/>Error:" . $e;
                     }
 
                     # THE WHOLE THING BREAKS HERE
@@ -157,7 +157,20 @@ $foundCVEs = array();
                             }else {
                                 $refForExploit = "";
                             }
-                            echo $v . " " . $refForExploit . "<br/>";
+
+                            #implement this: if no version
+                            #then dont do POSSIBLE 
+                            #only do basic
+                            if(strlen($versionFound) > 0){
+                                echo $v . " " . $refForExploit . "<br/>";
+                            }else{
+                                if($countery == 1){
+                                    #pass
+                                }else{
+                                    echo $v . " " . $refForExploit . "<br/>";
+                                }
+                            }
+                            
                         
                         }
                         $countery += 1;

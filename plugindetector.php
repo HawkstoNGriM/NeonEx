@@ -119,6 +119,17 @@ function pluginDetect($site,$cms){
             $res = mb_substr($res, 0, 300);
             #echo "More ";
         }
+
+        #remove some chars
+        if(str_contains($res, ".")){
+            $res = str_replace(".","",$res);
+        }elseif(str_contains($res,":") ){
+            $res = str_replace(":","",$res);
+        }elseif(str_contains($res,"{") ){
+            $res = str_replace("{","",$res);
+        }elseif(str_contains($res,"}") ){
+            $res = str_replace("}","",$res);
+        }
         
         echo $res;
 

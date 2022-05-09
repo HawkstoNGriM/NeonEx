@@ -45,7 +45,7 @@ function pluginDetect($site,$cms){
         foreach($data as $d){
             if(str_contains($site,$d) && $d !== " " && $d !== "" ){
                 #print_r($d);
-                echo "&nbsp; ⌚" . $d . "  <a href='exploitFinder.php?query=$d'> ⛓ Search Exploits ⛓ </a>" ;  
+                echo "&nbsp; ⌚" . $d . "  <a target='_blank' href='exploitFinder.php?query=$d'> ⛓ Search Exploits ⛓ </a>" ;  
             }
         }
     }

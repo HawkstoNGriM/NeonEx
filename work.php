@@ -73,20 +73,15 @@ $foundCVEs = array();
                     //echo "<p > Detecting CMS for ... " .  $detectCMS . " ...</p>" ;
                     
 
-                    # THE WHOLE THING BREAKS HERE
+     
                     
                     try{
-                        
                         @$cms = new DetectCMS\DetectCMS($detectCMS);
-                        //on linux (lampp xampp) this passes
-                        //it doesnt go to Error 
-                        //but it doesnt show anything else either?
                     }
                     catch (Exception $e) {
                         echo "Couldnt detect CMS. <br/>Error:" . $e;
                     }
 
-                    # THE WHOLE THING BREAKS HERE
 
 
                     if ($cms->getResult()) {
@@ -108,7 +103,7 @@ $foundCVEs = array();
                     echo "<br/>Couldnt detect CMS. ";
                 }
 
-                echo "<br><hr>";
+                echo "<br>";
                 if($cmsfound !== "" && $detectCMS !== ""){
                     $versionFound = versionDetectorFunction($detectCMS,$cmsfound);
                 }else {
@@ -119,7 +114,7 @@ $foundCVEs = array();
 
                 echo "<p class='alert alert-dark' style='padding:5; margin-left:1%; margin-right:2%;'> Detected Version: <b>" . $versionFound . "</b> </p>";
 
-                echo "<hr>";
+                echo "<br>";
 
 
                 #echo " UNCOMMENT ME (x2) ! <br/>";
@@ -261,7 +256,7 @@ $foundCVEs = array();
                 }
 
             ?>
-            <br/><hr>
+            <br/>
 
             <h4 class="alert alert-dark" style="margin-left:1%;">Plugins</h4>
             <?php 
@@ -280,7 +275,7 @@ $foundCVEs = array();
             }
 
             ?>           
-            <br><hr>
+            <br>
 
             <h4 class="alert alert-dark">Possible Fixes</h4>
             <?php 
@@ -333,6 +328,7 @@ $foundCVEs = array();
             <br/>
             <p><b>Or visit our </b> <a href="vulnfix.html"> Vulnerability Fixing Recommendations </a> site.  
             <br/>
+            <hr/>
         </div>
 
     </div>
@@ -353,55 +349,5 @@ $foundCVEs = array();
 </html>
 
 
-
-
-
-
-
-
-
-
-<!-- LOOK UP SPECIFIC CVE NUMBER DETAILS
-echo "<br/><b> Looking up CVEs for: " . $number . "</b><br/>";
-        
-                                    // GET REQUEST TO APIs - try one, if it doesnt work try other
-                                    try {
-                                        $url = "https://cve.circl.lu/api/cve/$number";
-                                        $result = file_get_contents($url);
-                                        //echo htmlspecialchars($result);
-                                        $result = json_decode($result);
-                                        $data = $result->capec;
-                                        $num = 1;
-                                        foreach ($data as $d) {
-                                            echo "<u> Vulnerability number " . $num . "</u><br/>";
-                                            if (isset($d->name)) {
-                                                echo "Name:" . $d->name . " <br/>";
-                                            }
-                                            if (isset($d->summary)) {
-                                                echo "Summary:" . $d->summary . " <br/>";
-                                            }
-                                            if (isset($d->prerequisites)) {
-                                                echo "Prerequisites : " . $d->prerequisites . " </br>";
-                                            }
-                                            if (isset($d->solutions)) {
-                                                echo "Solutions : " . $d->solutions . " </br>";
-                                            }
-        
-                                            //echo $d->name;
-                                            //print_r($d);
-        
-                                            $num++;
-                                        }
-                                    } catch (Exception) {
-                                        $url = "https://services.nvd.nist.gov/rest/json/cve/1.0/$number";
-                                        $result = file_get_contents($url);
-                                        echo htmlspecialchars($result);
-                                    }
-                                    //https://www.cve-search.org/api/ (dokumentacija samo)
-                                    //https://cve.circl.lu/api/cve/CVE-2010-3333
-                                    //also whatever this is: https://services.nvd.nist.gov/rest/json/cve/1.0/CVE-2021-45105
-        
-        
-        
-        
- -->
+<!-- Platform developed by F.O. - FFOS Student for the Masters thesis thing -->
+<!-- Hawkston Grim software -->

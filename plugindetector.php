@@ -2,6 +2,7 @@
 
 
 function pluginDetect($site,$cms){
+    error_reporting(E_ALL ^ E_WARNING);
     //echo "CMS: " . $cms;
 
     if($site !== "" && $cms !== ""){
@@ -9,7 +10,8 @@ function pluginDetect($site,$cms){
     }
     //first lets get the reuqest 
     else {
-        echo "<br/>GET param or CMS detection variable empty.";
+        echo "<br/>GET param or CMS detection variable empty. ";
+        $site = file_get_contents($site);
     }
 
 

@@ -3,6 +3,7 @@
 
 
 function versionDetectorFunction($url, $cms){
+    error_reporting(E_ALL ^ E_WARNING);
     $ERRORS = 0;
     $systems = [
         "Wordpress",

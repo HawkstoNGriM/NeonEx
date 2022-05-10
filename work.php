@@ -18,7 +18,8 @@ require "csvReaderForExploits.php";
 require "plugindetector.php";
 
 
-
+#supress boring file_Get_contents 403/404 warnings
+error_reporting(E_ALL ^ E_WARNING);
 
 $cmsfound = "";
 $foundCVEs = array();
@@ -107,12 +108,12 @@ $foundCVEs = array();
                 if($cmsfound !== "" && $detectCMS !== ""){
                     $versionFound = versionDetectorFunction($detectCMS,$cmsfound);
                 }else {
-                    echo "<br/> DetectCMS or CMSfound variables seem empty. Cant detect version.";
+                    echo "CMS Wasn't detected, so can't detect version either.";
                     $versionFound = "";
                 }
                 
 
-                echo "<p class='alert alert-dark' style='padding:5; margin-left:1%; margin-right:2%;'> Detected Version: <b>" . $versionFound . "</b> </p>";
+                echo "<br/><p class='alert alert-dark' style='padding:5; margin-left:1%; margin-right:2%;'> Detected Version: <b>" . $versionFound . "</b> </p>";
 
                 echo "<br>";
 
@@ -126,50 +127,58 @@ $foundCVEs = array();
                     }elseif ($cmsfound !== "" && strlen($cmsfound) > 0 ){
                         echo "<p hidden> Couldnt detect version, running general search</p>";
                         $printvar_expl = findInCsv($cmsfound,"","Resources/files_exploits.csv");
+                    }else {
+                        $printvar_expl = "";
                     }
                     $countery = 0;
-                    foreach($printvar_expl as $pve){
-                        #divide into seperate arrays
-                        if($countery == 0){
-                            echo "<br/><h4>Possible Exploits</h4><hr/>";
-                        } else if ($countery == 1) {
-                            echo "<br/><h4>Possible Related Exploits</h4><hr/>";
-                        }
-                        foreach($pve as $v){
-                            #"- -" in $v
-                            if(str_contains($v, "- -")){
-                                $explNumForUrl = explode("- -",$v);
-                                $explNumForUrl = $explNumForUrl[1];
-                                $explNumForUrl = explode("/",$explNumForUrl);
-                                $explNumForUrl = end($explNumForUrl);
-                                #should get the last thing - number 
-                                $explNumForUrl = explode(".",$explNumForUrl);
-                                $explNumForUrl = $explNumForUrl[0];
-                                #cause 89213.txt 
-                                #we just need the number
-
-                                $refForExploit = "<a href='https://www.exploit-db.com/exploits/" . $explNumForUrl . "'> Exploit </a>";
-                            }else {
-                                $refForExploit = "";
+                    
+                    if($printvar_expl !== ""){
+                        foreach($printvar_expl as $pve){
+                            #divide into seperate arrays
+                            if($countery == 0){
+                                echo "<br/><h4>Possible Exploits</h4><hr/>";
+                            } else if ($countery == 1) {
+                                echo "<br/><h4>Possible Related Exploits</h4><hr/>";
                             }
-
-                            #implement this: if no version
-                            #then dont do POSSIBLE 
-                            #only do basic
-                            if(strlen($versionFound) > 0){
-                                echo $v . " " . $refForExploit . "<br/>";
-                            }else{
-                                if($countery == 1){
-                                    #pass
-                                }else{
-                                    echo $v . " " . $refForExploit . "<br/>";
+                            foreach($pve as $v){
+                                #"- -" in $v
+                                if(str_contains($v, "- -")){
+                                    $explNumForUrl = explode("- -",$v);
+                                    $explNumForUrl = $explNumForUrl[1];
+                                    $explNumForUrl = explode("/",$explNumForUrl);
+                                    $explNumForUrl = end($explNumForUrl);
+                                    #should get the last thing - number 
+                                    $explNumForUrl = explode(".",$explNumForUrl);
+                                    $explNumForUrl = $explNumForUrl[0];
+                                    #cause 89213.txt 
+                                    #we just need the number
+    
+                                    $refForExploit = "<a href='https://www.exploit-db.com/exploits/" . $explNumForUrl . "'> Exploit </a>";
+                                }else {
+                                    $refForExploit = "";
                                 }
-                            }
+    
+                                #implement this: if no version
+                                #then dont do POSSIBLE 
+                                #only do basic
+                                if(strlen($versionFound) > 0){
+                                    echo $v . " " . $refForExploit . "<br/>";
+                                }else{
+                                    if($countery == 1){
+                                        #pass
+                                    }else{
+                                        echo $v . " " . $refForExploit . "<br/>";
+                                    }
+                                }
+                                
                             
-                        
+                            }
+                            $countery += 1;
                         }
-                        $countery += 1;
+                    } else {
+                        echo "<br/> Undetected version or CMS - can't show exploits.";
                     }
+
                 } catch(Exception $xr){
                     echo "<br/> $xr";
                 }
@@ -182,26 +191,33 @@ $foundCVEs = array();
                     }elseif ($cmsfound !== "" && strlen($cmsfound) > 0 ) {
                         echo "<p hidden> Couldnt detect version, running general search</p>";
                         $printvar_cves = findInCsvx($cmsfound,"","Resources/allCVEs2022.csv");
+                    } else{
+                        $printvar_cves = "";
                     }
                     
-                    $counterx = 0;
-                    foreach($printvar_cves as $pvc){
-                        #divide into seperate arrays
-                        if($counterx == 0){
-                            echo "<br/>";
-                            echo "<h4>Possible Vulnerabilities</h4><hr/>";
-                        } else if ($counterx == 1){
-                            echo "<br/>";
-                            echo "<h4>Possible Related Vulnerabilities</h4><hr/>";
+                    if($printvar_cves !== ""){
+                        $counterx = 0;
+                        foreach($printvar_cves as $pvc){
+                            #divide into seperate arrays
+                            if($counterx == 0){
+                                echo "<br/>";
+                                echo "<h4>Possible Vulnerabilities</h4><hr/>";
+                            } else if ($counterx == 1){
+                                echo "<br/>";
+                                echo "<h4>Possible Related Vulnerabilities</h4><hr/>";
+                            }
+    
+                            foreach($pvc as $p){
+                                echo $p;
+                                #seperate all cves into array for later:
+                                #preg_match("CVE\-\d+\-\d+", $printvar_cves, $foundCVEs);
+                            }
+                        $counterx += 1;
                         }
-
-                        foreach($pvc as $p){
-                            echo $p;
-                            #seperate all cves into array for later:
-                            #preg_match("CVE\-\d+\-\d+", $printvar_cves, $foundCVEs);
-                        }
-                    $counterx += 1;
+                    }else {
+                        echo "<br/> Undetected version or CMS - can't show CVEs.";
                     }
+
                     
                 } catch(Exception $wrp){
                     echo "<br/> $wrp";

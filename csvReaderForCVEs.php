@@ -37,7 +37,7 @@ function findInCsvx($query, $version,$datasetfile) {
                     if(str_contains($data[3], $version2)){
                         
                         //implement status check
-                        $mainEntrysample = "[+] <a target='_blank' href=https://cve.circl.lu/api/cve/" . $data[0] .">$data[0]</a> " . " 💉 " . $data[2] . " 📕 : " . $data[1] . " ⛓: " . $data[3];
+                        $mainEntrysample = "[➕] <a target='_blank' href=https://cve.circl.lu/api/cve/" . $data[0] .">$data[0]</a> " . " 💉 " . $data[2] . " 📕 : " . $data[1] . " ⛓: " . $data[3];
                         array_push($mainVulns, $mainEntrysample);
                     }
                     else {
@@ -50,7 +50,7 @@ function findInCsvx($query, $version,$datasetfile) {
                             if(str_contains($data[3],$version2)){
                                 //pass
                             }else{
-                                $entry = "[?] <a target='_blank' href=https://cve.circl.lu/api/cve/" . $data[0] .">$data[0]</a> " . " 💉 " . $data[2] . " 📕 : " . $data[1] . " ⛓: " . $data[3];
+                                $entry = "[❓] <a target='_blank' href=https://cve.circl.lu/api/cve/" . $data[0] .">$data[0]</a> " . " 💉 " . $data[2] . " 📕 : " . $data[1] . " ⛓: " . $data[3];
                                 array_push($relatedVulns, $entry);
                             }
                         }

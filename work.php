@@ -13,9 +13,11 @@ require "exploitFinder.php";
 #implement Csv readers
 require "csvReaderForCVEs.php";
 require "csvReaderForExploits.php";
+require "csvReaderForFixes.php";
 
 #require plugindetector
 require "plugindetector.php";
+
 
 
 #supress boring file_Get_contents 403/404 warnings
@@ -104,7 +106,7 @@ $foundCVEs = array();
                     echo "<br/>Couldnt detect CMS. ";
                 }
 
-                echo "<br>";
+                #echo "<br>";
                 if($cmsfound !== "" && $detectCMS !== ""){
                     $versionFound = versionDetectorFunction($detectCMS,$cmsfound);
                 }else {
@@ -113,9 +115,9 @@ $foundCVEs = array();
                 }
                 
 
-                echo "<br/><p class='alert alert-dark' style='padding:5; margin-left:1%; margin-right:2%;'> Detected Version: <b>" . $versionFound . "</b> </p>";
+                echo "<br/><p style='padding:5; margin-left:1%; margin-right:2%;'>🌑 Detected Version: <b>" . $versionFound . "</b> </p>";
 
-                echo "<br>";
+                echo "<hr>";
 
 
                 #echo " UNCOMMENT ME (x2) ! <br/>";
@@ -272,7 +274,7 @@ $foundCVEs = array();
                 }
 
             ?>
-            <br/>
+            
 
             <h4 class="alert alert-dark" style="margin-left:1%;">Plugins</h4>
             <?php 
@@ -338,9 +340,21 @@ $foundCVEs = array();
                     
                 }
 
+                echo "<br/>";
+                
+                if($cmsfound !== ""){
+                    try{
+                        echo "<br/><b> Showing all found Required actions found for $cmsfound (Generally):</b><br/>";
+                        $fixesCsv = findInCsvFixes($cmsfound);
+                        echo $fixesCsv;
+                    } catch(Exception $fixerror){
+                        echo "Required actions not detected for this CMS. $fixerror";
+                    }
+
+                }
+
 
             ?>
-            <br/>
             <br/>
             <p><b>Or visit our </b> <a href="vulnfix.html"> Vulnerability Fixing Recommendations </a> site.  
             <br/>

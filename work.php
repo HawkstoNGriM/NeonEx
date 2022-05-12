@@ -115,7 +115,7 @@ $foundCVEs = array();
                 }
                 
 
-                echo "<br/><p style='padding:5; margin-left:1%; margin-right:2%;'>🌑 Detected Version: <b>" . $versionFound . "</b> </p>";
+                echo "<br/><p style='padding:5; margin-left:1%; margin-right:2%; margin-top:2%;'>🌑 Detected Version: <b>" . $versionFound . "</b> </p>";
 
                 echo "<hr>";
 

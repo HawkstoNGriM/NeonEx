@@ -253,7 +253,7 @@ $foundCVEs = array();
                         $exploits = exploitFinder($cmsfoundplusversion);
                         
                         #print_r($exploits);
-                        if($exploits !== "" && count($exploits) > 0){
+                        if($exploits !== ""){
                             foreach($exploits as $expl) {
                                 echo '<p style="font-size:10px;">';
                                 echo $expl;

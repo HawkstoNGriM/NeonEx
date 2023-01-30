@@ -79,7 +79,7 @@ header('Content-Type: text/html; charset=utf-8');
         <!-- Footer-->
         <footer class="py-5 bg-dark">
             <div class="container"><p class="m-0 text-center text-white">Created by F.O.</p></div>
-            <!-- Created by F.O. - student at FFOS@UNIOS for the Masters degree project -->
+            <!-- Created by F.O. -->
             
             <center>
             <a href="#top">Back to the top</a>

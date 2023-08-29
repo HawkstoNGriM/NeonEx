@@ -189,10 +189,10 @@ $foundCVEs = array();
                 //SEGMENT
                 try{
                     if($versionFound !== "" && strlen($versionFound) > 0){
-                        $printvar_cves = findInCsvx($cmsfound,$versionFound,"Resources/allCVEs2022.csv");
+                        $printvar_cves = findInCsvx($cmsfound,$versionFound,"Resources/allCVEs.csv");
                     }elseif ($cmsfound !== "" && strlen($cmsfound) > 0 ) {
                         echo "<p hidden> Couldnt detect version, running general search</p>";
-                        $printvar_cves = findInCsvx($cmsfound,"","Resources/allCVEs2022.csv");
+                        $printvar_cves = findInCsvx($cmsfound,"","Resources/allCVEs.csv");
                     } else{
                         $printvar_cves = "";
                     }

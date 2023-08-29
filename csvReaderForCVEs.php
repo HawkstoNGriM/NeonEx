@@ -102,6 +102,6 @@ function findInCsvx($query, $version,$datasetfile) {
 
 
 
-#findInCsvx("WordPress","3.0","Resources/allCVEs2022.csv");
+#findInCsvx("WordPress","3.0","Resources/allCVEs.csv");
 
 ?>
